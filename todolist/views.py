@@ -6,7 +6,10 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
 from todolist.models import TodoItem
-from todolist.serializers import TodoItemSerializer
+from todolist.serializers import TodoItemSerializer, UserSerializer
+# from .serializers import UserSerializer
+from rest_framework.decorators import api_view
+from rest_framework import status
 
 class TodoItemView(APIView):
     # authentication_classes =
@@ -15,6 +18,13 @@ class TodoItemView(APIView):
         todos = TodoItem.objects.all()
         serializer = TodoItemSerializer(todos, many=True)
         return Response(serializer.data)
+    
+    def post(self, request, format=None):
+        serializer = TodoItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(ObtainAuthToken):
     # authentication_classes = [SessionAuthentication, BasicAuthentication]
@@ -31,3 +41,13 @@ class LoginView(ObtainAuthToken):
             'user_id': user.pk,
             'email': user.email
         })
+        
+        
+@api_view(['POST'])
+def register_user(request):
+    if request.method == 'POST':
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
