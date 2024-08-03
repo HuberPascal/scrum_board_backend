@@ -10,9 +10,12 @@ from todolist.serializers import TodoItemSerializer, UserSerializer
 # from .serializers import UserSerializer
 from rest_framework.decorators import api_view
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 class TodoItemView(APIView):
-    # authentication_classes =
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     
     def get(self, request, format=None):
         todos = TodoItem.objects.all()
@@ -41,6 +44,7 @@ class LoginView(ObtainAuthToken):
             'user_id': user.pk,
             'email': user.email
         })
+        
         
         
 @api_view(['POST'])
