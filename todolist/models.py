@@ -7,12 +7,12 @@ from django.contrib.auth.models import AbstractUser
 class TodoItem(models.Model):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=100, blank=True, null=True)
-    PRIORITY_CHOICES = [
-        ('low', 'Low'),
-        ('medium', 'Medium'),
-        ('high', 'High'),
+    TAG_CHOICES = [
+        ('yellow', 'Yellow'),
+        ('blue', 'Blue'),
+        ('green', 'Green'),
     ]
-    priority = models.CharField(max_length=6, choices=PRIORITY_CHOICES, default='medium')
+    tags = models.CharField(max_length=6, choices=TAG_CHOICES, default='medium')
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
