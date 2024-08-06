@@ -20,7 +20,7 @@ class TodoItemView(APIView):
     def get(self, request, format=None):
         todos = TodoItem.objects.all()
         serializer = TodoItemSerializer(todos, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     def post(self, request, format=None):
         serializer = TodoItemSerializer(data=request.data)
@@ -28,6 +28,23 @@ class TodoItemView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self,request, format=None):
+        todo = TodoItem.objects.get(pk=request.data.get('id'))
+        serializer = TodoItemSerializer(todo, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg': 'Todo updated succesfully', 'data': serializer.data}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def patch(self, request, format=None):
+         todo = TodoItem.objects.get(pk=request.data.get('id'))
+         serializer = TodoItemSerializer(todo, data=request.data, partial=True)
+         if serializer.is_valid():
+             serializer.save()
+             return Response({'msg': 'Todo updated succesfully', 'data':serializer.data}, status=status.HTTP_200_OK)
+         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 
 class LoginView(ObtainAuthToken):
     # authentication_classes = [SessionAuthentication, BasicAuthentication]
