@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
 
 class TodoItemView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -44,6 +45,12 @@ class TodoItemView(APIView):
              serializer.save()
              return Response({'msg': 'Todo updated succesfully', 'data':serializer.data}, status=status.HTTP_200_OK)
          return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+     
+    def delete(self, request, format=None):
+        todo = TodoItem.objects.get(pk=request.data.get('id'))
+        todo.delete()
+        return Response({'msg': 'Todo deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
         
 
 class LoginView(ObtainAuthToken):
