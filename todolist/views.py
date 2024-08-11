@@ -49,7 +49,7 @@ class TodoItemView(APIView):
     def delete(self, request, format=None):
         todo = TodoItem.objects.get(pk=request.data.get('id'))
         todo.delete()
-        return Response({'msg': 'Todo deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'msg': 'Todo deleted successfully'}, status=status.HTTP_200_OK)
 
         
 

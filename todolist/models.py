@@ -11,6 +11,11 @@ class TodoItem(models.Model):
         ('yellow', 'Yellow'),
         ('blue', 'Blue'),
         ('green', 'Green'),
+        ('red', 'Red'),
+        ('orange', 'Orange'),
+        ('purple', 'Purple'),
+        ('magenta', 'Magenta'),
+        ('cyan', 'Cyan'),
     ]
     
     TASK_TYPE_CHOICES = [
@@ -19,7 +24,7 @@ class TodoItem(models.Model):
         ('inProgress', 'In progress'),
         ('done', 'Done'),
     ]
-    tags = models.CharField(max_length=6, choices=TAG_CHOICES, default='medium')
+    tags = models.CharField(max_length=7, choices=TAG_CHOICES, default='medium')
     taskType = models.CharField(max_length=10, choices=TASK_TYPE_CHOICES, default='todo')
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
