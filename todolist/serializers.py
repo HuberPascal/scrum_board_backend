@@ -2,24 +2,25 @@
 from rest_framework import serializers
 from todolist.models import CustomUser, TodoItem
 
-class TodoItemSerializer(serializers.ModelSerializer):
-      class Meta:
-          model = TodoItem
-          fields = '__all__'
-          
-          
-          
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'password']
+        fields = [ 'firstName', 'lastName', 'username', 'email', 'password']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = CustomUser(
+            firstName=validated_data['firstName'],
+            lastName=validated_data['lastName'],
             username=validated_data['username'],
             email=validated_data['email']
         )
-        user.set_password(validated_data['password'])
+        user.set_password(validated_data['password'])  # Verschlüsselung des Passworts
         user.save()
         return user
+
+# TodoItemSerializer: Serializer für das TodoItem-Modell
+class TodoItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TodoItem
+        fields = '__all__'
