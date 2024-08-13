@@ -42,7 +42,9 @@ class TodoItemAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
-        todos = TodoItem.objects.all()
+        # Ursprünglich: todos = TodoItem.objects.all()  (nicht löschen)
+        # Jetzt: Filtere nur die Aufgaben des aktuell angemeldeten Benutzers
+        todos = TodoItem.objects.filter(author=request.user)  # Filter tasks by the logged-in user
         serializer = TodoItemSerializer(todos, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
