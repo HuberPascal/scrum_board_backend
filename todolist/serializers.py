@@ -5,13 +5,13 @@ from todolist.models import CustomUser, TodoItem
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = [ 'firstName', 'lastName', 'username', 'email', 'password']
+        fields = [ 'first_name', 'last_name', 'username', 'email', 'password']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = CustomUser(
-            firstName=validated_data['firstName'],
-            lastName=validated_data['lastName'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'],
             username=validated_data['username'],
             email=validated_data['email']
         )
