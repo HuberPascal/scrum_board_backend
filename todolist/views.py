@@ -16,8 +16,8 @@ class UserLoginView(ObtainAuthToken):
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
         return Response({
-            'token': token.key,
-            'user_id': user.pk,
+            'token': token.key, # Token wird zurückgegeben
+            'user_id': user.pk, # pk = Primary Key
             'email': user.email
         })
     
@@ -28,13 +28,28 @@ class UserRegisterView(APIView):
         if serializer.is_valid():
             user = serializer.save()  # Benutzer wird erstellt
             token, created = Token.objects.get_or_create(user=user)  # Token wird erstellt
+            
+            
+            self.create_sample_tasks(user) # Muster-Tasks erstellen
+            
             return Response({
                 'message': 'User registered successfully',
                 'token': token.key,  # Token wird zurückgegeben
-                'user_id': user.pk,
+                'user_id': user.pk, # pk = Primary Key
                 'email': user.email
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def create_sample_tasks(self, user):
+        # Liste von Beispiel-Tasks
+        sample_tasks = [
+            {"title": "Welcome to your Kanban board!", "description": "This is your first task", "taskType": "todo", "tags": "blue"},
+            {"title": "Add your first real task", "description": "Start managing your tasks", "taskType": "doToday", "tags": "green"},
+            {"title": "Drag and drop tasks", "description": "Try dragging tasks between columns", "taskType": "inProgress", "tags": "yellow"},
+        ]
+        
+        for task_data in sample_tasks:
+            TodoItem.objects.create(author=user, **task_data)
 
 
 class TodoItemAPIView(APIView):
