@@ -5,8 +5,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class TodoItem(models.Model):
-    title = models.CharField(max_length=100)
-    description = models.CharField(max_length=100, blank=True, null=True)
+    title = models.CharField(max_length=200)
+    description = models.CharField(max_length=200, blank=True, null=True)
     TAG_CHOICES = [
         ('yellow', 'Yellow'),
         ('blue', 'Blue'),

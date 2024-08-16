@@ -29,7 +29,6 @@ class UserRegisterView(APIView):
             user = serializer.save()  # Benutzer wird erstellt
             token, created = Token.objects.get_or_create(user=user)  # Token wird erstellt
             
-            
             self.create_sample_tasks(user) # Muster-Tasks erstellen
             
             return Response({
