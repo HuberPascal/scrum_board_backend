@@ -1,11 +1,12 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
+from django.contrib.auth.models import User
 from rest_framework.authtoken.views import ObtainAuthToken, APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from todolist.models import TodoItem
+from todolist.models import CustomUser, TodoItem
 from todolist.serializers import TodoItemSerializer, UserSerializer
 
 
@@ -40,7 +41,7 @@ class UserRegisterView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def create_sample_tasks(self, user):
-        # Liste von Beispiel-Tasks
+        # Liste von Beispiel-Tasks welche beim registrieren geladen werden
         sample_tasks = [
             {"title": "Welcome to your Kanban board!", "description": "This is your first task", "taskType": "todo", "tags": "blue"},
             {"title": "Add your first real task", "description": "Start managing your tasks", "taskType": "doToday", "tags": "green"},
@@ -99,3 +100,35 @@ class TodoItemDetailView(APIView):
         todo = get_object_or_404(TodoItem, pk=id)
         todo.delete()
         return Response({'msg': 'Todo deleted successfully'}, status=status.HTTP_200_OK)
+    
+class UserListView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        users = CustomUser.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class UserDetailView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, user_id):
+        user = get_object_or_404(CustomUser, pk=user_id)
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def put(self, request, user_id):
+        user = get_object_or_404(CustomUser, pk=user_id)
+        serializer = UserSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, user_id):
+        user = get_object_or_404(CustomUser, pk=user_id)
+        user.delete()
+        return Response({'msg': 'User deleted successfully'}, status=status.HTTP_200_OK)
+    

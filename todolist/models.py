@@ -43,4 +43,4 @@ class CustomUser(AbstractUser):
 
 
     def __str__(self):
-        return self.username
+        return f'({self.id}) {self.username}'
