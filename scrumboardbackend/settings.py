@@ -31,7 +31,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
 ]
 
-AUTH_USER_MODEL = 'todolist.CustomUser'
+AUTH_USER_MODEL = 'users.CustomUser'
 
 
 
@@ -47,8 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'todolist',
+    'user_auth',
+    'users',
     'rest_framework.authtoken'
-    
 ]
 
 MIDDLEWARE = [

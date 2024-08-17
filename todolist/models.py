@@ -2,7 +2,7 @@
 import datetime
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+
 
 class TodoItem(models.Model):
     title = models.CharField(max_length=200)
@@ -36,11 +36,4 @@ class TodoItem(models.Model):
     def __str__(self):
         return f'({self.id}) {self.title}'
 
-class CustomUser(AbstractUser):
-    email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=30, blank=True)
 
-
-    def __str__(self):
-        return f'({self.id}) {self.username}'

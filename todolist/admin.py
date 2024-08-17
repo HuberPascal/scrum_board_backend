@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from todolist.models import CustomUser, TodoItem
+from todolist.models import TodoItem
 
 # Register your models here.
 admin.site.register(TodoItem)
-admin.site.register(CustomUser)
+
