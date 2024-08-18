@@ -3,6 +3,8 @@ import datetime
 from django.conf import settings
 from django.db import models
 
+from users.models import CustomUser
+
 
 class TodoItem(models.Model):
     title = models.CharField(max_length=200)
