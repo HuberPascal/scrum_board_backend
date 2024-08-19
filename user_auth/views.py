@@ -1,4 +1,3 @@
-from django.contrib.auth import login
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
@@ -6,6 +5,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from users.serializers import UserSerializer
 from todolist.models import  TodoItem
+from rest_framework.permissions import AllowAny
 
 
 class UserLoginView(ObtainAuthToken):
@@ -23,6 +23,8 @@ class UserLoginView(ObtainAuthToken):
         })
 
 class UserRegisterView(APIView):
+    permission_classes = [AllowAny]
+    
     def post(self, request, *args, **kwargs):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
