@@ -32,6 +32,7 @@ class TodoItem(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
+    members = models.ManyToManyField(CustomUser, related_name='tasks', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     checked = models.BooleanField(default=False)
 
