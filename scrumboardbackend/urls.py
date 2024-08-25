@@ -6,4 +6,5 @@ urlpatterns = [
     path('auth/', include('user_auth.urls')),  # Authentifizierung und Registrierung
     path('todos/', include('todolist.urls')),  # To-Do-Listen-Management
     path('users/', include('users.urls')),  # Benutzerverwaltung
+    path('contacts/', include('contacts.urls')),
 ]

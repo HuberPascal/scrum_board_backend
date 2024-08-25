@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'todolist',
     'user_auth',
     'users',
+    'contacts',
     'rest_framework.authtoken'
 ]
 
