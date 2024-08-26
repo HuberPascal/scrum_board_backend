@@ -5,6 +5,7 @@ from rest_framework.authtoken.views import  APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from contacts.models import Contact
 from todolist.models import  TodoItem
 from todolist.serializers import TodoItemSerializer
 
@@ -23,9 +24,14 @@ class TodoItemAPIView(APIView):
         serializer = TodoItemSerializer(data=request.data)
         if serializer.is_valid():
             todo_item = serializer.save(author=request.user)
-            todo_item.members.add(request.user)
+        
+        # Verhindere, dass der Autor als Mitglied hinzugefügt wird
+            if request.user in todo_item.members.all():
+                todo_item.members.remove(request.user)
+        
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class TodoItemDetailView(APIView):

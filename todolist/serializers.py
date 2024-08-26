@@ -1,14 +1,17 @@
 
 from rest_framework import serializers
+from contacts.models import Contact
+from contacts.serializers import ContactSerializer
 from todolist.models import  TodoItem
 from users.models import CustomUser
-from users.serializers import UserSerializer
+from contacts.serializers import ContactSerializer
+
 
 class TodoItemSerializer(serializers.ModelSerializer):
-    author = UserSerializer(read_only=True)
-    members = UserSerializer(many=True, read_only=True)
+    author = ContactSerializer(read_only=True)
+    members = ContactSerializer(many=True, read_only=True) 
     member_ids = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=CustomUser.objects.all(), write_only=True, source='members'
+        many=True, queryset=Contact.objects.all(), write_only=True, source='members'
     )
     class Meta:
         model = TodoItem
@@ -18,6 +21,10 @@ class TodoItemSerializer(serializers.ModelSerializer):
         members_data = validated_data.pop('members', [])
         todo_item = TodoItem.objects.create(**validated_data)
         todo_item.members.set(members_data)
+        if todo_item.author in members_data:
+            members_data.remove(todo_item.author)
+    
+            todo_item.members.set(members_data)
         return todo_item
 
     def update(self, instance, validated_data):

@@ -3,6 +3,7 @@ import datetime
 from django.conf import settings
 from django.db import models
 
+from contacts.models import Contact
 from users.models import CustomUser
 
 
@@ -32,7 +33,7 @@ class TodoItem(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    members = models.ManyToManyField(CustomUser, related_name='tasks', blank=True)
+    members = models.ManyToManyField(Contact, related_name='tasks', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     checked = models.BooleanField(default=False)
 

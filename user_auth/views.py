@@ -3,7 +3,8 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from rest_framework.views import APIView
-from user_auth.sample_data import SAMPLE_TASKS, SAMPLE_USERS
+from contacts.models import Contact
+from user_auth.sample_data import SAMPLE_TASKS, SAMPLE_CONTACTS
 from users.models import CustomUser
 from users.serializers import UserSerializer
 from todolist.models import  TodoItem
@@ -36,7 +37,7 @@ class UserRegisterView(APIView):
             
             # Beispiel-Tasks erstellen
             self.create_sample_tasks(user)
-            self.create_sample_users(user)
+            self.create_sample_contacts(user)
             
             return Response({
                 'message': 'User registered successfully',
@@ -52,16 +53,11 @@ class UserRegisterView(APIView):
             TodoItem.objects.create(author=user, **task_data)
 
 
-    def create_sample_users(self, user):
-        for user_data in SAMPLE_USERS:
-            if not CustomUser.objects.filter(username=user_data['username']).exists():
-                sample_user = CustomUser(
-                    first_name=user_data['first_name'],
-                    last_name=user_data['last_name'],
-                    username=user_data['username'],
-                    email=user_data['email']
-                )
-                sample_user.set_password("defaultpassword")
-                sample_user.save()
-
-
+    def create_sample_contacts(self, user):
+        for contact_data in SAMPLE_CONTACTS:
+            Contact.objects.create(
+                first_name=contact_data['first_name'],
+                last_name=contact_data['last_name'],
+                email=contact_data['email'],
+                user=user  # Der Kontakt gehört dem neu registrierten Benutzer
+            )
