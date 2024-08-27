@@ -40,7 +40,7 @@ class TodoListTest(TestCase):
             "description": "Updated description",
             "tags": "green",
             "taskType": "inProgress",
-            "author": self.user.id
+            "author": self.user.id,
         }
         # todo_id = post_response.data['id'] 
         put_response = self.client.put(f'/todos/{todo.id}/', update_data, format='json')
