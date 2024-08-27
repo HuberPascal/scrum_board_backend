@@ -21,7 +21,9 @@ class UserLoginView(ObtainAuthToken):
             'token': token.key,
             'user_id': user.pk,
             'email': user.email,
-            'first_name': user.first_name
+            'first_name': user.first_name,
+            'last_name': user.last_name
+            
         })
 
 class UserRegisterView(APIView):
@@ -51,7 +53,9 @@ class UserRegisterView(APIView):
                 'token': token.key,
                 'user_id': user.pk,
                 'email': user.email,
-                'first_name': user.first_name
+                'first_name': user.first_name,
+                'last_name': user.last_name
+                
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

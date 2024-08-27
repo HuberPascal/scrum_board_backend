@@ -1,6 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework.authtoken.models import Token
+from contacts.models import Contact
 from todolist.models import CustomUser, TodoItem
 
 
@@ -10,6 +11,13 @@ class TodoListTest(TestCase):
         self.user = CustomUser.objects.create_user(username='test_user', password='test_user')
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        
+        self.contact = Contact.objects.create(
+            first_name='Test',
+            last_name='User',
+            email='testuser@example.com',
+            user=self.user
+        )
 
     def test_todolist_get(self):
         response = self.client.get('/todos/')
@@ -21,7 +29,8 @@ class TodoListTest(TestCase):
             "description": "Test description",
             "tags": "blue",
             "taskType": "todo",
-            "author": self.user.id
+            "author": self.user.id,
+            "member_ids": [self.contact.id]
         }
         post_response = self.client.post('/todos/', data, format='json')
         self.assertEqual(post_response.status_code, 201)
@@ -41,6 +50,7 @@ class TodoListTest(TestCase):
             "tags": "green",
             "taskType": "inProgress",
             "author": self.user.id,
+            "member_ids": [self.contact.id]
         }
         # todo_id = post_response.data['id'] 
         put_response = self.client.put(f'/todos/{todo.id}/', update_data, format='json')
