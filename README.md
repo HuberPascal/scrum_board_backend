@@ -19,7 +19,7 @@ Dieses Projekt ist das Backend für eine Scrum Board Anwendung, die als Kanban-B
 3. Erstelle und aktiviere eine virtuelle Umgebung:
 
     ```bash
-    python -m venv env
+    python3 -m venv env
     source env/bin/activate  # On Windows use `env\Scripts\activate`
     ```
 
